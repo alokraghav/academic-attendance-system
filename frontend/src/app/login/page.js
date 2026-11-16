@@ -1,15 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
-import { GraduationCap, Lock, Mail, AlertCircle, ArrowRight } from "lucide-react";
+import { GraduationCap, Lock, Mail, AlertCircle, ArrowRight, ShieldCheck, Zap } from "lucide-react";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const { user, login, switchRole } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+
+  // If already authenticated, redirect to appropriate role dashboard immediately
+  useEffect(() => {
+    if (user) {
+      if (user.role === "admin") router.push("/admin");
+      else if (user.role === "faculty") router.push("/faculty");
+      else if (user.role === "student") router.push("/student");
+    }
+  }, [user, router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,10 +35,16 @@ export default function LoginPage() {
     }
   };
 
-  const handleDemoLogin = (demoEmail, demoPassword) => {
-    setEmail(demoEmail);
-    setPassword(demoPassword);
+  const handleInstantLogin = async (role) => {
     setError("");
+    setLoading(true);
+    try {
+      await switchRole(role);
+    } catch (err) {
+      setError(err.message || "Failed to switch role");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,8 +63,48 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Login Box */}
-        <div className="mt-6 bg-white py-8 px-6 shadow-card border border-border sm:rounded-lg sm:px-10">
+        {/* Localhost Bypass Banner */}
+        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+          <div className="flex items-center justify-center space-x-1.5 text-xs font-semibold text-blue-900 mb-2">
+            <Zap className="w-4 h-4 text-primary" />
+            <span>Localhost Mode Active: Direct 1-Click Access</span>
+          </div>
+          <p className="text-[11px] text-blue-700 mb-3">
+            Click any role to surpass authentication and enter the portal immediately:
+          </p>
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              disabled={loading}
+              onClick={() => handleInstantLogin("admin")}
+              className="py-2 px-3 bg-purple-600 hover:bg-purple-700 text-white rounded text-xs font-semibold shadow-sm transition-all text-center flex items-center justify-center space-x-1"
+            >
+              <span>Admin</span>
+              <ArrowRight className="w-3 h-3" />
+            </button>
+            <button
+              type="button"
+              disabled={loading}
+              onClick={() => handleInstantLogin("faculty")}
+              className="py-2 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-semibold shadow-sm transition-all text-center flex items-center justify-center space-x-1"
+            >
+              <span>Faculty</span>
+              <ArrowRight className="w-3 h-3" />
+            </button>
+            <button
+              type="button"
+              disabled={loading}
+              onClick={() => handleInstantLogin("student")}
+              className="py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs font-semibold shadow-sm transition-all text-center flex items-center justify-center space-x-1"
+            >
+              <span>Student</span>
+              <ArrowRight className="w-3 h-3" />
+            </button>
+          </div>
+        </div>
+
+        {/* Manual Login Form */}
+        <div className="mt-4 bg-white py-6 px-6 shadow-card border border-border sm:rounded-lg sm:px-10">
           <form className="space-y-4" onSubmit={handleSubmit}>
             {error && (
               <div className="p-3 rounded-md bg-status-danger-bg border border-status-danger-border flex items-start space-x-2 text-xs text-status-danger-text">
@@ -99,36 +156,6 @@ export default function LoginPage() {
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </form>
-
-          {/* Quick Demo Logins for Evaluation */}
-          <div className="mt-6 pt-5 border-t border-border">
-            <p className="text-[11px] font-semibold text-text-secondary uppercase tracking-wider text-center mb-3">
-              One-Click Evaluator Logins
-            </p>
-            <div className="grid grid-cols-3 gap-2">
-              <button
-                type="button"
-                onClick={() => handleDemoLogin("admin@smartacademic.edu", "Admin@123")}
-                className="py-1.5 px-2 bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 rounded text-[11px] font-semibold transition-colors text-center"
-              >
-                Admin
-              </button>
-              <button
-                type="button"
-                onClick={() => handleDemoLogin("rajesh.sharma@smartacademic.edu", "Faculty@123")}
-                className="py-1.5 px-2 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-900 rounded text-[11px] font-semibold transition-colors text-center"
-              >
-                Faculty
-              </button>
-              <button
-                type="button"
-                onClick={() => handleDemoLogin("student01@smartacademic.edu", "Student@123")}
-                className="py-1.5 px-2 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 rounded text-[11px] font-semibold transition-colors text-center"
-              >
-                Student
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* Project Meta Credits */}

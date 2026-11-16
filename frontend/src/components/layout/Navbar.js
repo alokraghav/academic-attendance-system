@@ -2,10 +2,10 @@
 
 import React from "react";
 import { useAuth } from "@/lib/auth-context";
-import { LogOut, User, Bell, Calendar } from "lucide-react";
+import { LogOut, Calendar, Shield, GraduationCap, Users } from "lucide-react";
 
 export default function Navbar() {
-  const { user, logout } = useAuth();
+  const { user, logout, switchRole } = useAuth();
   const today = new Date().toLocaleDateString("en-IN", {
     weekday: "short",
     year: "numeric",
@@ -34,6 +34,41 @@ export default function Navbar() {
           <span>{today}</span>
           <span className="text-gray-300">|</span>
           <span className="text-gray-700 font-semibold">Academic Session 2026-2027</span>
+        </div>
+
+        {/* Localhost Role Switcher Bar */}
+        <div className="hidden lg:flex items-center bg-gray-100 p-1 rounded-md border border-gray-200 space-x-1 text-xs">
+          <span className="px-2 font-medium text-gray-500">Switch Role:</span>
+          <button
+            onClick={() => switchRole("admin")}
+            className={`px-2.5 py-1 rounded font-semibold transition-all ${
+              user?.role === "admin"
+                ? "bg-purple-700 text-white shadow-xs"
+                : "text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            Admin
+          </button>
+          <button
+            onClick={() => switchRole("faculty")}
+            className={`px-2.5 py-1 rounded font-semibold transition-all ${
+              user?.role === "faculty"
+                ? "bg-blue-700 text-white shadow-xs"
+                : "text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            Faculty
+          </button>
+          <button
+            onClick={() => switchRole("student")}
+            className={`px-2.5 py-1 rounded font-semibold transition-all ${
+              user?.role === "student"
+                ? "bg-emerald-700 text-white shadow-xs"
+                : "text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            Student
+          </button>
         </div>
       </div>
 

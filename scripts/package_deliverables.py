@@ -12,6 +12,7 @@ print("Copying clean source code...")
 shutil.copytree(
     SOURCE_DIR,
     DEST_FOLDER,
+    dirs_exist_ok=True,
     ignore=shutil.ignore_patterns(
         "node_modules", "venv", ".next", ".git", "__pycache__", ".pytest_cache", "*.pyc", "*.log"
     )
