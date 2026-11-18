@@ -15,14 +15,25 @@ All mathematical formulas, attendance percentages, defaulter logic, leave handli
 
 ---
 
-## 🚀 Live Localhost Endpoints
+## 🚀 Live Production Cloud Endpoints
+
+| Service | Cloud Platform | Live Production URL | Description |
+| :--- | :--- | :--- | :--- |
+| **Frontend Web Portal** | **Vercel** | [https://smart-academic-attendance.vercel.app](https://smart-academic-attendance.vercel.app) | Production Next.js University ERP Portal |
+| **Backend API & Swagger Docs** | **Render** | [https://smart-academic-backend-hg60.onrender.com/api/docs](https://smart-academic-backend-hg60.onrender.com/api/docs) | Interactive FastAPI OpenAPI Documentation |
+| **Database & Auth** | **Supabase** | `aws-1-ap-southeast-1.pooler.supabase.com:6543` | Managed Cloud PostgreSQL 17 Cluster |
+| **Alternative API Docs** | **Render** | [https://smart-academic-backend-hg60.onrender.com/api/redoc](https://smart-academic-backend-hg60.onrender.com/api/redoc) | ReDoc API Reference |
+| **Backend Health Check** | **Render** | [https://smart-academic-backend-hg60.onrender.com/health](https://smart-academic-backend-hg60.onrender.com/health) | Health & Status Endpoint |
+
+---
+
+## 💻 Local Development Endpoints
 
 | Service | Local URL | Description |
 | :--- | :--- | :--- |
 | **Frontend Web Portal** | `http://localhost:3000` | Modern, light-themed Next.js University ERP Portal |
 | **Backend API & Swagger Docs** | `http://localhost:8000/api/docs` | Interactive FastAPI OpenAPI Documentation |
-| **Alternative API Docs** | `http://localhost:8000/api/redoc` | ReDoc API Reference |
-| **Backend Health Check** | `http://localhost:8000/health` | Health & Status Endpoint |
+| **Backend Health Check** | `http://localhost:8000/health` | Local Health Endpoint |
 
 ---
 
