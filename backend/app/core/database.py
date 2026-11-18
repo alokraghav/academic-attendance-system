@@ -4,9 +4,11 @@ from sqlalchemy.pool import NullPool
 from backend.app.core.config import settings
 
 db_url = settings.DATABASE_URL
-# Handle postgres:// vs postgresql:// for SQLAlchemy compatibility
+# Handle postgres:// and postgresql:// for SQLAlchemy psycopg2 driver
 if db_url.startswith("postgres://"):
-    db_url = db_url.replace("postgres://", "postgresql://", 1)
+    db_url = db_url.replace("postgres://", "postgresql+psycopg2://", 1)
+elif db_url.startswith("postgresql://") and not db_url.startswith("postgresql+"):
+    db_url = db_url.replace("postgresql://", "postgresql+psycopg2://", 1)
 
 connect_args = {}
 pool_kwargs = {}
